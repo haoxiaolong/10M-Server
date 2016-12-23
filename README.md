@@ -3,7 +3,7 @@ Using a stock debian-8 image and a Go server you can handle 10M concurrent conne
 
 The server accepts websocket connections ports 10000-11000 (to avoid exhaustion of ephemeral ports on the clients during testing) and in the url the client specifies a channel to connect to, such as:
 
-ws://<server>:10000/<channel>
+ws://\<server\>:10000/\<channel\>
 
 After the websocket connection has been setup, the server never reads any data from the connection, it only writes messages to the client. Publishing to the channel is handled by redis, using the PUBLISH/PSUBSCRIBE commands. This is unnecessary for a single server machine, but is nice when you have multiple servers and you need some sort of central place to handle message routing.
 Whenever a message is published on a channel, the server will send a message to each connected client subscribed to that channel. To make sure clients are still connected, the server will also send a ping message every 5 minutes. The client can use a missing ping message to detect if it has been disconnected.
